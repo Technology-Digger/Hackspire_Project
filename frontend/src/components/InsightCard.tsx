@@ -14,7 +14,7 @@ interface InsightCardProps {
   resultLabel: string;
 }
 
-const API_BASE_URL = "https://hackspire-project-backend.onrender.com/";
+const API_BASE_URL = "https://hackspire-project-backend.onrender.com";
 
 const InsightCard = ({ title, icon, accept, endpoint, resultLabel }: InsightCardProps) => {
   const [file, setFile] = useState<File | null>(null);
