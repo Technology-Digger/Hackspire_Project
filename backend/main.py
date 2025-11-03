@@ -11,25 +11,32 @@ import torch
 from PIL import Image
 from transformers import BlipProcessor, BlipForConditionalGeneration
 
-# ✅ Make sure Whisper can find ffmpeg
-ffmpeg_path = r"C:\Users\USER1\Downloads\ffmpeg-8.0-essentials_build\ffmpeg-8.0-essentials_build\bin"
-os.environ["PATH"] += os.pathsep + ffmpeg_path
-os.environ["FFMPEG_BINARY"] = os.path.join(ffmpeg_path, "ffmpeg.exe")
-print("🔍 Added ffmpeg path:", ffmpeg_path)
 
+# ✅ Universal ffmpeg setup (Hugging Face + Windows + Linux compatible)
+ffmpeg_exe = shutil.which("ffmpeg")
+if ffmpeg_exe:
+    os.environ["FFMPEG_BINARY"] = ffmpeg_exe
+    print("✅ FFmpeg found at:", ffmpeg_exe)
+else:
+    print("⚠️ FFmpeg not found. Please install or add it to PATH.")
+
+
+# ✅ Create FastAPI app
 app = FastAPI(title="🧬 Data Decoder Backend")
 
+
+# ✅ CORS settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://127.0.0.1:8080"],
+    allow_origins=["*"],  # allow frontend from any origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Load models
+# ✅ Load models
+device = "cuda" if torch.cuda.is_available() else "cpu"
 whisper_model = whisper.load_model("base", device=device)
 processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
 blip_model = BlipForConditionalGeneration.from_pretrained(
@@ -37,9 +44,9 @@ blip_model = BlipForConditionalGeneration.from_pretrained(
 ).to(device)
 
 
+# 🎧 AUDIO → TEXT
 @app.post("/audio-insights")
 async def audio_insights(audio: UploadFile = File(...)):
-    """🎧 Upload an audio file and get its text transcription."""
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
             shutil.copyfileobj(audio.file, tmp)
@@ -60,9 +67,9 @@ async def audio_insights(audio: UploadFile = File(...)):
             os.remove(audio_path)
 
 
+# 🖼 IMAGE → INSIGHT
 @app.post("/image-insights")
 async def image_insights(image: UploadFile = File(...)):
-    """🖼 Upload an image and get a caption-like text insight."""
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
             shutil.copyfileobj(image.file, tmp)
@@ -84,6 +91,7 @@ async def image_insights(image: UploadFile = File(...)):
             os.remove(image_path)
 
 
+# 🎥 VIDEO → INSIGHTS (audio transcription + frame captions)
 @app.post("/video-insights")
 async def video_insights(video: UploadFile = File(...)):
     """🎥 Upload a video, get transcript + frame captions + insights."""
@@ -93,10 +101,15 @@ async def video_insights(video: UploadFile = File(...)):
             shutil.copyfileobj(video.file, tmp)
             video_path = tmp.name
 
+        # Ensure ffmpeg exists
+        ffmpeg_cmd = shutil.which("ffmpeg")
+        if not ffmpeg_cmd:
+            raise HTTPException(status_code=500, detail="FFmpeg not found on server environment")
+
         # Extract audio for Whisper
         audio_path = video_path.replace(".mp4", "_audio.mp3")
         subprocess.run(
-            [os.path.join(ffmpeg_path, "ffmpeg.exe"), "-y", "-i", video_path, "-vn", "-acodec", "mp3", audio_path],
+            [ffmpeg_cmd, "-y", "-i", video_path, "-vn", "-acodec", "mp3", audio_path],
             check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
@@ -107,17 +120,17 @@ async def video_insights(video: UploadFile = File(...)):
         text = transcript["text"]
         lang = transcript["language"]
 
-        # Extract a few key frames for visual insight (1 every 10 seconds)
+        # Extract key frames (1 every 10 seconds)
         frame_dir = tempfile.mkdtemp()
         frame_pattern = os.path.join(frame_dir, "frame_%03d.jpg")
         subprocess.run(
-            [os.path.join(ffmpeg_path, "ffmpeg.exe"), "-i", video_path, "-vf", "fps=1/10", frame_pattern],
+            [ffmpeg_cmd, "-i", video_path, "-vf", "fps=1/10", frame_pattern],
             check=True,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
 
-        # Generate captions for each extracted frame
+        # Generate captions for frames
         captions = []
         for frame_file in sorted(os.listdir(frame_dir)):
             frame_path = os.path.join(frame_dir, frame_file)
@@ -149,4 +162,3 @@ async def video_insights(video: UploadFile = File(...)):
         for path in [video_path, audio_path]:
             if os.path.exists(path):
                 os.remove(path)
-
