@@ -8,56 +8,99 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Futuristic dark theme colors */
-    --background: 240 20% 6%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
-    --card: 240 15% 10%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 98%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 240 15% 10%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 240 10% 3.9%;
 
-    --primary: 189 100% 50%;
-    --primary-foreground: 240 20% 6%;
+    --primary: 195 100% 40%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 276 75% 53%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 270 95% 55%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 10% 20%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 240 5% 90%;
+    --muted-foreground: 240 4% 46%;
 
-    --accent: 260 100% 44%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 195 100% 40%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 20% 20%;
-    --input: 240 20% 15%;
-    --ring: 189 100% 50%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 195 100% 40%;
 
-    --radius: 1rem;
-
-    /* Custom neon colors */
-    --neon-blue: 189 100% 50%;
-    --neon-purple: 276 75% 53%;
-    --deep-purple: 260 100% 44%;
+    --radius: 0.75rem;
     
-    /* Glassmorphism */
-    --glass-bg: 240 15% 10%;
-    --glass-border: 240 20% 25%;
+    --gradient-cyber: linear-gradient(135deg, hsl(195 100% 40%) 0%, hsl(270 95% 55%) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(195 100% 40% / 0.2) 0%, hsl(270 95% 55% / 0.2) 100%);
+    --glass-bg: hsl(0 0% 100% / 0.6);
+    --glass-border: hsl(195 100% 40% / 0.2);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 200 100% 95%;
+
+    --card: 240 8% 6%;
+    --card-foreground: 200 100% 95%;
+
+    --popover: 240 8% 6%;
+    --popover-foreground: 200 100% 95%;
+
+    --primary: 195 100% 50%;
+    --primary-foreground: 240 10% 3.9%;
+
+    --secondary: 270 95% 65%;
+    --secondary-foreground: 240 10% 3.9%;
+
+    --muted: 240 8% 15%;
+    --muted-foreground: 200 20% 60%;
+
+    --accent: 195 100% 50%;
+    --accent-foreground: 240 10% 3.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 200 100% 95%;
+
+    --border: 240 8% 15%;
+    --input: 240 8% 12%;
+    --ring: 195 100% 50%;
     
-    /* Gradients */
-    --gradient-purple: linear-gradient(135deg, hsl(276 75% 53%), hsl(260 100% 44%));
-    --gradient-neon: linear-gradient(135deg, hsl(189 100% 50%), hsl(276 75% 53%));
-    
-    /* Glow effects */
-    --glow-blue: 0 0 20px hsl(189 100% 50% / 0.5);
-    --glow-purple: 0 0 20px hsl(276 75% 53% / 0.5);
-    
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --gradient-cyber: linear-gradient(135deg, hsl(195 100% 50%) 0%, hsl(270 95% 65%) 100%);
+    --gradient-glow: linear-gradient(135deg, hsl(195 100% 50% / 0.2) 0%, hsl(270 95% 65% / 0.2) 100%);
+    --glass-bg: hsl(240 8% 10% / 0.4);
+    --glass-border: hsl(200 100% 70% / 0.15);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -67,65 +110,65 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+    @apply bg-background text-foreground antialiased;
   }
-  
-  /* Glassmorphism utility classes */
-  .glass {
-    background: rgba(15, 15, 25, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
+}
+
+@layer utilities {
   .glass-card {
-    background: rgba(20, 20, 35, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    @apply backdrop-blur-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] rounded-xl;
   }
   
-  /* Neon glow effects */
-  .glow-blue {
-    box-shadow: 0 0 20px hsl(189 100% 50% / 0.3),
-                0 0 40px hsl(189 100% 50% / 0.2);
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
   }
   
-  .glow-purple {
-    box-shadow: 0 0 20px hsl(276 75% 53% / 0.3),
-                0 0 40px hsl(276 75% 53% / 0.2);
+  .glow-border {
+    @apply relative;
   }
   
-  /* Gradient backgrounds */
-  .gradient-purple {
-    background: linear-gradient(135deg, hsl(276 75% 53%), hsl(260 100% 44%));
+  .glow-border::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500;
+    background: var(--gradient-cyber);
+    padding: 2px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
   }
   
-  .gradient-neon {
-    background: linear-gradient(135deg, hsl(189 100% 50%), hsl(276 75% 53%));
+  .glow-border:hover::before {
+    @apply opacity-100;
   }
   
-  /* Smooth transitions */
-  .transition-smooth {
-    transition: var(--transition-smooth);
+  @keyframes pan-image {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(-10%, -10%); }
+    100% { transform: translate(0, 0); }
   }
   
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
+  @keyframes pulse-wave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
   }
   
-  ::-webkit-scrollbar-track {
-    background: hsl(240 20% 6%);
+  .animate-pan {
+    animation: pan-image 20s ease-in-out infinite;
   }
   
-  ::-webkit-scrollbar-thumb {
-    background: hsl(240 15% 20%);
-    border-radius: 4px;
+  .animate-pulse-wave {
+    animation: pulse-wave 1.5s ease-in-out infinite;
   }
   
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(189 100% 50%);
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  .animation-delay-1000 {
+    animation-delay: 1000ms;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2000ms;
   }
 }
